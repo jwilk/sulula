@@ -155,7 +155,6 @@ def main():
     finally:
         url = url_tmpl.format(page='logout')
         ua.get(url)
-        pass
 
 if __name__ == '__main__':
     main()
