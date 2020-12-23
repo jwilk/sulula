@@ -18,7 +18,7 @@ f''  # Python >= 3.6 is required
 
 prog = argparse.ArgumentParser().prog
 
-class UserAgent(object):
+class UserAgent():
 
     ident = 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0'
     logging = None
