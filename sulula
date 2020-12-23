@@ -129,7 +129,7 @@ def main():
                 [elt] = record_elt.xpath('.//span[@class="desc-o-title"]')
                 item['title'] = str(elt.text_content())
                 [elt] = record_elt.xpath('.//div[@class="record-thumb"]//div[@title="Open the page for this record"]')
-                match = re.search("'(https://[^\s']+)'", elt.get('onclick', ''))
+                match = re.search(r"'(https://[^\s']+)'", elt.get('onclick', ''))
                 if match is not None:
                     item['url'] = match.group(1)
                 [elt] = record_elt.xpath('.//div[@data-agenda]/span[@class="acct-agenda"]')
