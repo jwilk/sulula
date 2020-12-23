@@ -145,6 +145,13 @@ def main():
                     text = elt.text.strip()
                     text = re.sub(r'\A([0-3][0-9])[.]([01][0-9])[.]([0-9]{4})(?=\s)', r'\3-\2-\1', text)
                     item['request-date'] = text
+                    elts = record_elt.xpath('.//span[@class="acct-ready"]')
+                    if elts:
+                        text = elts[0].text or ''
+                        if re.search(r'\bnot ready for pick up\b', text):
+                            item['ready'] = False
+                        elif re.search(r'\bREADY to pick up\b', text):
+                            item['ready'] = True
                     elts = record_elt.xpath('.//span[@class="acct-isfirst"]')
                     if elts:
                         [elt] = elts
