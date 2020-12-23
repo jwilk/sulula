@@ -89,7 +89,7 @@ def main():
     form.inputs['swww_user'].value = user
     form.inputs['swww_pass'].value = password
     form_data = form.form_values()
-    form_data = urllib.parse.urlencode(form_data, quote_via=urllib.parse.quote)
+    form_data = urllib.parse.urlencode(form_data)
     form_data = form_data.encode('ASCII')
     data = {}
     html = ua.post(form.action, data=form_data)
