@@ -7,7 +7,6 @@ import argparse
 import getpass
 import http.cookiejar
 import re
-import subprocess
 import sys
 import urllib.request
 
@@ -59,22 +58,17 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--host', metavar='HOST', required=True)
     ap.add_argument('--user', metavar='USER', required=True)
-    ap.add_argument('--password-eval', metavar='COMMAND', help='use password from the COMMAND\'s stdout')
+    ap.add_argument('--password-file', metavar='FILE', help='read password from FILE')
     ap.add_argument('--with-returned', action='store_true')
     ap.add_argument('--verbose', action='store_true')
     options = ap.parse_args()
     host = options.host
     if '.' not in options.host:
         host = f'{host}.sowa.pl'
-    if options.password_eval is not None:
-        proc = subprocess.run(
-            options.password_eval,
-            shell=True,
-            stdout=subprocess.PIPE,
-            universal_newlines=True,
-            check=True,
-        )
-        password = proc.stdout.rstrip('\n')
+    if options.password_file is not None:
+        with open(options.password_file, 'rt') as file:
+            password = file.readline()
+        password = password.rstrip('\n')
     else:
         password = getpass.getpass(f'{host} password: ')
     if not password:
