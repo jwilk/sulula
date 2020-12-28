@@ -36,7 +36,7 @@ class UserAgent():
     def _request(self, url, *, data):
         url = urllib.parse.urljoin(self.base_url, url)
         if self.logging is not None:
-            print('*', url, file=self.logging)
+            print('#', url, file=self.logging)
         request = urllib.request.Request(
             url,
             headers=self.headers,
