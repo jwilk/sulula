@@ -77,6 +77,9 @@ def main():
         password = proc.stdout.rstrip('\n')
     else:
         password = getpass.getpass(f'{host} password: ')
+    if not password:
+        print(f'{prog}: error: empty password', file=sys.stderr)
+        sys.exit(1)
     user = options.user
     ua = UserAgent(host=host)
     if options.verbose:
