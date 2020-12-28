@@ -92,9 +92,18 @@ def main():
     form_data = urllib.parse.urlencode(form_data)
     form_data = form_data.encode('ASCII')
     data = {}
+    need_logout = True
     html = ua.post(form.action, data=form_data)
     try:
         html = parse_html(html)
+        elts = html.xpath('//div[@class="error-msg"]')
+        if elts:
+            [elt] = elts
+            text = elt.text_content().strip()
+            if text.startswith('Login '):
+                need_logout = False
+                print(f'{prog}: error: could not log in', file=sys.stderr)
+                sys.exit(1)
         [elt] = html.xpath('.//div[@id="acc-info-barcode-no"]')
         data['card-no'] = elt.text.strip()
         [elt] = html.xpath('.//div[@id="acc-info-data-name"]')
@@ -160,6 +169,8 @@ def main():
                         item['queue-pos'] = n
         yaml.dump(data, stream=sys.stdout, sort_keys=False, allow_unicode=True)
     finally:
+        if not need_logout:
+            return
         url = url_tmpl.format(page='logout')
         ua.get(url)
 
