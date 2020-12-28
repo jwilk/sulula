@@ -92,6 +92,9 @@ def main():
     form_data = urllib.parse.urlencode(form_data)
     form_data = form_data.encode('ASCII')
     data = {}
+    def flush_data():
+        yaml.dump(data, stream=sys.stdout, sort_keys=False, allow_unicode=True)
+        data.clear()
     need_logout = True
     html = ua.post(form.action, data=form_data)
     try:
@@ -123,6 +126,7 @@ def main():
         assert text.count(',') == 1
         text = text.replace(',', '.')
         data['balance'] = text
+        flush_data()
         for page in 'onloan', 'reserved', 'returned':
             if page == 'returned' and not options.with_returned:
                 continue
@@ -167,7 +171,7 @@ def main():
                         match = re.match(r'\bYou are in the (\d+) place in the queue\b', elt.text)
                         n = int(match.group(1))
                         item['queue-pos'] = n
-        yaml.dump(data, stream=sys.stdout, sort_keys=False, allow_unicode=True)
+            flush_data()
     finally:
         if not need_logout:
             return
