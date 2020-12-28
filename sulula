@@ -104,20 +104,20 @@ def main():
                 need_logout = False
                 print(f'{prog}: error: could not log in', file=sys.stderr)
                 sys.exit(1)
-        [elt] = html.xpath('.//div[@id="acc-info-barcode-no"]')
+        [elt] = html.xpath('//div[@id="acc-info-barcode-no"]')
         data['card-no'] = elt.text.strip()
-        [elt] = html.xpath('.//div[@id="acc-info-data-name"]')
+        [elt] = html.xpath('//div[@id="acc-info-data-name"]')
         data['name'] = elt.text.strip()
-        [elt] = html.xpath('.//div[@id="acc-info-data-birthday"]/div[last()]')
+        [elt] = html.xpath('//div[@id="acc-info-data-birthday"]/div[last()]')
         data['birth-date'] = elt.text.strip()
-        [elt] = html.xpath('.//div[@id="acc-info-data-main-addr"]/div[last()]')
+        [elt] = html.xpath('//div[@id="acc-info-data-main-addr"]/div[last()]')
         text = [line.strip() for line in elt.text.strip().splitlines()]
         data['home-address'] = text
-        [elt] = html.xpath('.//div[@id="acc-info-data-phone"]/div[last()]')
+        [elt] = html.xpath('//div[@id="acc-info-data-phone"]/div[last()]')
         data['phone'] = elt.text.strip()
-        [elt] = html.xpath('.//div[@id="acc-info-addr-items"]//div[@class="acc-info-protected"]')
+        [elt] = html.xpath('//div[@id="acc-info-addr-items"]//div[@class="acc-info-protected"]')
         data['email'] = elt.text.strip()
-        [elt] = html.xpath('.//div[@id="acc-info-summary-items"]/div[last()]/b')
+        [elt] = html.xpath('//div[@id="acc-info-summary-items"]/div[last()]/b')
         text = elt.text.strip()
         assert text.count('.') == 0
         assert text.count(',') == 1
