@@ -173,6 +173,13 @@ def main():
                         match = re.match(r'\bYou are in the (\d+) place in the queue\b', elt.text)
                         n = int(match.group(1))
                         item['queue-pos'] = n
+                if page == 'onloan':
+                    elts = record_elt.xpath('.//span[@class="acc-waiting-number"]')
+                    if elts:
+                        [elt] = elts
+                        match = re.match(r'^(\d+) p', elt.text)
+                        n = int(match.group(1))
+                        item['queue-len'] = n
             flush_data()
     finally:
         if not need_logout:
