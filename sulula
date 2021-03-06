@@ -8,6 +8,7 @@ import argparse
 import getpass
 import http.cookiejar
 import re
+import shutil
 import sys
 import urllib.request
 
@@ -17,6 +18,8 @@ import yaml
 0_0  # Python >= 3.6 is required
 
 prog = argparse.ArgumentParser().prog
+
+inf = 1e999
 
 class UserAgent():
 
@@ -90,8 +93,9 @@ def main():
     form_data = urllib.parse.urlencode(form_data)
     form_data = form_data.encode('ASCII')
     data = {}
+    (term_width, term_height) = shutil.get_terminal_size(fallback=(inf, inf))
     def flush_data():
-        yaml.dump(data, stream=sys.stdout, sort_keys=False, allow_unicode=True)
+        yaml.dump(data, stream=sys.stdout, sort_keys=False, allow_unicode=True, width=term_width)
         data.clear()
     need_logout = True
     html = ua.post(form.action, data=form_data)
