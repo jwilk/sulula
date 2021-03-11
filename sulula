@@ -85,6 +85,12 @@ def main():
     url = url_tmpl.format(page='info')
     data = ua.get(url)
     html = parse_html(data)
+    elts = html.xpath('//div[@class="simple-offline"]')
+    if elts:
+        [elt] = elts
+        text = elt.text_content().strip()
+        print(f'{prog}: server error: {text}', file=sys.stderr)
+        sys.exit(1)
     [form] = html.xpath('//form[@name="log"]')
     form.inputs['swww_user'].value = user
     form.inputs['swww_pass'].value = password
