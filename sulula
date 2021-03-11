@@ -7,6 +7,7 @@
 import argparse
 import getpass
 import http.cookiejar
+import math
 import re
 import shutil
 import sys
@@ -18,8 +19,6 @@ import yaml
 0_0  # Python >= 3.6 is required
 
 prog = argparse.ArgumentParser().prog
-
-inf = 1e999
 
 class UserAgent():
 
@@ -93,7 +92,7 @@ def main():
     form_data = urllib.parse.urlencode(form_data)
     form_data = form_data.encode('ASCII')
     data = {}
-    (term_width, term_height) = shutil.get_terminal_size(fallback=(inf, inf))
+    (term_width, term_height) = shutil.get_terminal_size(fallback=(math.inf, math.inf))
     def flush_data():
         yaml.dump(data, stream=sys.stdout, sort_keys=False, allow_unicode=True, width=term_width)
         data.clear()
