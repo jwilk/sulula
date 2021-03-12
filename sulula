@@ -98,9 +98,9 @@ def main():
     form_data = urllib.parse.urlencode(form_data)
     form_data = form_data.encode('ASCII')
     data = {}
-    (term_width, term_height) = shutil.get_terminal_size(fallback=(math.inf, math.inf))
+    tsize = shutil.get_terminal_size(fallback=(math.inf, math.inf))
     def flush_data():
-        yaml.dump(data, stream=sys.stdout, sort_keys=False, allow_unicode=True, width=term_width)
+        yaml.dump(data, stream=sys.stdout, sort_keys=False, allow_unicode=True, width=tsize.columns)
         data.clear()
     need_logout = True
     html = ua.post(form.action, data=form_data)
