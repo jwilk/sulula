@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 import argparse
+import datetime
 import getpass
 import http.cookiejar
 import math
@@ -56,6 +57,24 @@ class UserAgent():
 def parse_html(s):
     html_parser = lxml.html.HTMLParser(encoding='UTF-8')
     return lxml.html.document_fromstring(s, parser=html_parser)
+
+def parse_date(s, *, regexp):
+    def repl(match):
+        s = match.group(0)
+        c = match.group(1)
+        regexp = dict(
+            y='[0-9]{4}',
+            m='[01][0-9]',
+            d='[0-3][0-9]',
+        )[c]
+        return s[:-1] + regexp + s[-1]
+    regexp = regexp0 = re.sub(r'[(][?]P<([ydm])>[)]', repl, regexp)
+    regexp = re.compile(rf'\A(?:){regexp}\Z', re.DOTALL)
+    match = regexp.match(s)
+    if match is None:
+        raise ValueError(f'{s!r} does not match {regexp0!r}')
+    ymd = [int(match.group(k)) for k in ('y', 'm', 'd')]
+    return datetime.date(*ymd)
 
 def main():
     ap = argparse.ArgumentParser()
@@ -118,13 +137,11 @@ def main():
         data['card-no'] = elt.text.strip()
         [elt] = html.xpath('//div[@id="acc-info-cardno"]')
         text = elt.text_content()
-        date = re.sub(r'\A.*\bvalid\s+to\s+([0-3][0-9])[.]([01][0-9])[.]([0-9]{4})\b.*\Z', r'\3-\2-\1', text, flags=re.DOTALL)
-        assert text != date
-        data['valid-through'] = date
+        data['valid-through'] = parse_date(text, regexp=r'.*\bvalid\s+to\s+(?P<d>)[.](?P<m>)[.](?P<y>)\b.*')
         [elt] = html.xpath('//div[@id="acc-info-data-name"]')
         data['name'] = elt.text.strip()
         [elt] = html.xpath('//div[@id="acc-info-data-birthday"]/div[last()]')
-        data['birth-date'] = elt.text.strip()
+        data['birth-date'] = parse_date(elt.text.strip(), regexp=r'(?P<y>)-(?P<m>)-(?P<d>)')
         [elt] = html.xpath('//div[@id="acc-info-data-main-addr"]/div[last()]')
         text = [line.strip() for line in elt.text.strip().splitlines()]
         data['home-address'] = text
@@ -163,13 +180,11 @@ def main():
                 for key, elt in zip(('from', 'to'), elts):
                     key = 'date-' + key
                     text = elt.text.strip()
-                    text = re.sub(r'\A([0-3][0-9])[.]([01][0-9])[.]([0-9]{4})\Z', r'\3-\2-\1', text)
-                    item[key] = text
+                    item[key] = parse_date(text, regexp=r'(?P<d>)[.](?P<m>)[.](?P<y>)')
                 if page == 'reserved':
                     [elt] = record_elt.xpath('.//div[@data-agenda]/span[@class="acct-rezdate"]')
                     text = elt.text.strip()
-                    text = re.sub(r'\A([0-3][0-9])[.]([01][0-9])[.]([0-9]{4})(?=\s)', r'\3-\2-\1', text)
-                    item['request-date'] = text
+                    item['request-date'] = parse_date(text, regexp=r'(?P<d>)[.](?P<m>)[.](?P<y>)\s.*')
                     elts = record_elt.xpath('.//span[@class="acct-ready"]')
                     if elts:
                         text = elts[0].text or ''
