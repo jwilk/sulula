@@ -192,7 +192,7 @@ def main():
                             item['ready'] = False
                         elif re.search(r'\bREADY to pick up\b', text):
                             item['ready'] = True
-                    elts = record_elt.xpath('.//span[@class="acct-isfirst"]')
+                    elts = record_elt.xpath('.//span[@class="acct-isfirst" or @class="acct-isnth"]')
                     if elts:
                         [elt] = elts
                         match = re.match(r'\bYou are in the (\d+) place in the queue\b', elt.text)
