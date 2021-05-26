@@ -104,7 +104,7 @@ def main():
     url = url_tmpl.format(page='info')
     data = ua.get(url)
     html = parse_html(data)
-    elts = html.xpath('//div[@class="simple-offline"]')
+    elts = html.xpath('//div[@id="simple-offline"]')
     if elts:
         [elt] = elts
         text = elt.text_content().strip()
