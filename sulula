@@ -119,7 +119,7 @@ def main():
     data = {}
     tsize = shutil.get_terminal_size(fallback=(math.inf, math.inf))
     def flush_data():
-        yaml.dump(data, stream=sys.stdout, sort_keys=False, allow_unicode=True, width=tsize.columns)
+        yaml.dump(data, stream=sys.stdout, sort_keys=False, allow_unicode=True, width=(tsize.columns - 6))
         data.clear()
     need_logout = True
     html = ua.post(form.action, data=form_data)
