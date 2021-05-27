@@ -207,10 +207,9 @@ def main():
                         item['queue-len'] = n
             flush_data()
     finally:
-        if not need_logout:
-            return
-        url = url_tmpl.format(page='logout')
-        ua.get(url)
+        if need_logout:
+            url = url_tmpl.format(page='logout')
+            ua.get(url)
 
 if __name__ == '__main__':
     main()
