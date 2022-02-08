@@ -92,7 +92,7 @@ def main():
             password = file.readline()
         password = password.rstrip('\n')
     else:
-        password = getpass.getpass(f'{host} password: ')
+        password = getpass.getpass(f'{options.user} password for {host}: ')
     if not password:
         print(f'{prog}: error: empty password', file=sys.stderr)
         sys.exit(1)
