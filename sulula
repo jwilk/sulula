@@ -78,6 +78,9 @@ def parse_date(s, *, regexp):
 
 def main():
     ap = argparse.ArgumentParser()
+    if sys.version_info < (3, 10):
+        # https://bugs.python.org/issue9694
+        ap._optionals.title = 'options'
     ap.add_argument('--host', metavar='HOST', required=True)
     ap.add_argument('--user', metavar='USER', required=True)
     ap.add_argument('--password-file', metavar='FILE', help='read password from FILE')
