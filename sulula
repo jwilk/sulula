@@ -182,7 +182,7 @@ def main():
                 match = re.search(r"'(https://[^\s']+)'", elt.get('onclick', ''))
                 if match is not None:
                     item['url'] = match.group(1)
-                [elt] = record_elt.xpath('.//div[@data-agenda]/span[@class="acct-agenda"]')
+                [elt] = record_elt.xpath('.//div[@data-agenda]/*[@class="acct-agenda"]')
                 item['agenda'] = elt.text
                 elts = record_elt.xpath('.//div[@data-agenda]/span[@class="acct-date"]')
                 for key, elt in zip(('from', 'to'), elts):
