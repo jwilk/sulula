@@ -198,8 +198,10 @@ def main():
                         text = elts[0].text or ''
                         if re.search(r'\bnot ready for pick up\b', text):
                             item['ready'] = False
-                        elif re.search(r'\bREADY to pick up\b', text):
+                        elif re.search(r'\bis READY to pick up\b', text):
                             item['ready'] = True
+                        elif re.search(r'\bis ready for delivery\b', text):
+                            item['ready'] = 'for-delivery'
                     elts = record_elt.xpath('.//span[@class="acct-isfirst" or @class="acct-isnth"]')
                     if elts:
                         [elt] = elts
