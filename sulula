@@ -23,7 +23,7 @@ prog = argparse.ArgumentParser().prog
 
 class UserAgent():
 
-    ident = 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0'
+    ident = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0'
     logging = None
 
     def __init__(self, *, host):
