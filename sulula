@@ -17,7 +17,7 @@ import urllib.request
 import lxml.html
 import yaml
 
-type(0_0)  # Python >= 3.6 is required
+int(0_0)  # Python >= 3.6 is required
 
 prog = argparse.ArgumentParser().prog
 
