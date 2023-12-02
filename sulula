@@ -76,6 +76,9 @@ def parse_date(s, *, regexp):
     ymd = [int(match.group(k)) for k in ('y', 'm', 'd')]
     return datetime.date(*ymd)
 
+def xtext(elt):
+    return str(elt.xpath('normalize-space(string())'))
+
 def main():
     ap = argparse.ArgumentParser()
     if sys.version_info < (3, 10):
@@ -177,7 +180,7 @@ def main():
                 item = {}
                 items += [item]
                 [elt] = record_elt.xpath('.//span[@class="desc-o-title"]')
-                item['title'] = str(elt.text_content())
+                item['title'] = xtext(elt)
                 [elt] = record_elt.xpath('.//div[@title="Open the page for this record"]')
                 match = re.search(r"'(https://[^\s']+)'", elt.get('onclick', ''))
                 if match is not None:
