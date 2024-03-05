@@ -2,13 +2,14 @@
 
    $ sulula --help
    usage: sulula [-h] --host HOST --user USER [--password-file FILE]
-                 [--with-returned] [--verbose]
+                 [--with-personal-info] [--with-returned] [--verbose]
 
    options:
      -h, --help            show this help message and exit
      --host HOST
      --user USER
      --password-file FILE  read password from FILE
+     --with-personal-info
      --with-returned
      --verbose
 
@@ -16,11 +17,6 @@
    jwilk@jwilk.net password for warszawa-ochota.sowa.pl:
    card-no: ...
    valid-through: 2022-12-31
-   name: Wilk Jakub
-   birth-date: ...
-   home-address: ...
-   phone: ...
-   email: jwilk@jwilk.net
    balance: 0.00 PLN
    on-loan:
    - title: Pieśń o Sowie / Jarosław Górski ; ilustrowała Joanna Rusinek.

@@ -87,6 +87,7 @@ def main():
     ap.add_argument('--host', metavar='HOST', required=True)
     ap.add_argument('--user', metavar='USER', required=True)
     ap.add_argument('--password-file', metavar='FILE', help='read password from FILE')
+    ap.add_argument('--with-personal-info', action='store_true')
     ap.add_argument('--with-returned', action='store_true')
     ap.add_argument('--verbose', action='store_true')
     options = ap.parse_args()
@@ -149,17 +150,18 @@ def main():
         [elt] = html.xpath('//div[@id="acc-info-cardno"]')
         text = elt.text_content()
         data['valid-through'] = parse_date(text, regexp=r'.*\bvalid\s+to\s+(?P<d>)[.](?P<m>)[.](?P<y>)\b.*')
-        [elt] = html.xpath('//div[@id="acc-info-data-name"]')
-        data['name'] = elt.text.strip()
-        [elt] = html.xpath('//div[@id="acc-info-data-birthday"]/div[last()]')
-        data['birth-date'] = parse_date(elt.text.strip(), regexp=r'(?P<y>)-(?P<m>)-(?P<d>)')
-        [elt] = html.xpath('//div[@id="acc-info-data-main-addr"]/div[last()]')
-        text = [line.strip() for line in elt.text.strip().splitlines()]
-        data['home-address'] = text
-        [elt] = html.xpath('//div[@id="acc-info-data-phone"]/div[last()]')
-        data['phone'] = elt.text.strip()
-        [elt] = html.xpath('//div[@id="acc-info-addr-items"]//div[@class="acc-info-protected"]')
-        data['email'] = elt.text.strip()
+        if options.with_personal_info:
+            [elt] = html.xpath('//div[@id="acc-info-data-name"]')
+            data['name'] = elt.text.strip()
+            [elt] = html.xpath('//div[@id="acc-info-data-birthday"]/div[last()]')
+            data['birth-date'] = parse_date(elt.text.strip(), regexp=r'(?P<y>)-(?P<m>)-(?P<d>)')
+            [elt] = html.xpath('//div[@id="acc-info-data-main-addr"]/div[last()]')
+            text = [line.strip() for line in elt.text.strip().splitlines()]
+            data['home-address'] = text
+            [elt] = html.xpath('//div[@id="acc-info-data-phone"]/div[last()]')
+            data['phone'] = elt.text.strip()
+            [elt] = html.xpath('//div[@id="acc-info-addr-items"]//div[@class="acc-info-protected"]')
+            data['email'] = elt.text.strip()
         [elt] = html.xpath('//div[@id="acc-info-summary-items"]/div[last()]/b')
         text = elt.text.strip()
         assert text.count('.') == 0
