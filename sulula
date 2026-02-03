@@ -81,6 +81,7 @@ def xtext(elt):
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.color = False
     if sys.version_info < (3, 10):
         # https://bugs.python.org/issue9694
         ap._optionals.title = 'options'
